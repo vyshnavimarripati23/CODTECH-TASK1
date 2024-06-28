@@ -1,0 +1,75 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the Titanic dataset
+url = 'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'
+titanic = pd.read_csv(url)
+
+# Display the first few rows of the dataset
+titanic.head()
+# Display basic information about the dataset
+titanic.info()
+
+# Display summary statistics of the dataset
+titanic.describe()
+# Check for missing values
+missing_values = titanic.isnull().sum()
+missing_values
+
+# Handle missing values (e.g., fill or drop)
+titanic['Age'].fillna(titanic['Age'].median(), inplace=True)
+titanic['Embarked'].fillna(titanic['Embarked'].mode()[0], inplace=True)
+titanic.drop(columns=['Cabin'], inplace=True)
+# Histograms for numerical features
+plt.figure(figsize=(14, 6))
+
+plt.subplot(1, 2, 1)
+sns.histplot(titanic['Age'], bins=30, kde=True)
+plt.title('Age Distribution')
+
+plt.subplot(1, 2, 2)
+sns.histplot(titanic['Fare'], bins=30, kde=True)
+plt.title('Fare Distribution')
+
+plt.tight_layout()
+plt.show()
+# Count plots for categorical features
+plt.figure(figsize=(14, 6))
+
+plt.subplot(1, 3, 1)
+sns.countplot(data=titanic, x='Sex')
+plt.title('Gender Distribution')
+
+plt.subplot(1, 3, 2)
+sns.countplot(data=titanic, x='Pclass')
+plt.title('Passenger Class Distribution')
+
+plt.subplot(1, 3, 3)
+sns.countplot(data=titanic, x='Survived')
+plt.title('Survival Distribution')
+
+plt.tight_layout()
+plt.show()
+# Scatter plots
+plt.figure(figsize=(14, 6))
+
+plt.subplot(1, 2, 1)
+sns.scatterplot(data=titanic, x='Age', y='Fare', hue='Survived')
+plt.title('Age vs Fare by Survival')
+
+plt.subplot(1, 2, 2)
+sns.scatterplot(data=titanic, x='Pclass', y='Fare', hue='Survived')
+plt.title('Pclass vs Fare by Survival')
+
+plt.tight_layout()
+plt.show()
+# Select only numeric columns for the correlation matrix
+numeric_cols = titanic.select_dtypes(include=[np.number])
+[1:13 pm, 28/6/2024] Sangeetha 2: # Correlation heatmap
+plt.figure(figsize=(10, 6))
+corr_matrix = numeric_cols.corr()
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Heatmap')
+plt.show()
